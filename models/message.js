@@ -23,4 +23,3 @@ MessageSchema.virtual('date_formatted').get(function () {
 });
 
 module.exports = mongoose.model('Message', UserSchema);
--m ""
