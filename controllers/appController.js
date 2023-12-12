@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
+const bcrypt = require('bcryptjs');
+// const passport = require('../passport-config');
 
 exports.main_page = asyncHandler(async (req, res, next) => {
   res.render('index', { title: 'Main page' });
@@ -25,7 +27,15 @@ exports.sign_up_post = [
   body('email')
     .trim()
     .isEmail()
-    .withMessage('This is not a valid email address'),
+    .withMessage('This is not a valid email address')
+    .custom(async (value, { req }) => {
+      const user = await User.find({ email: value });
+      console.log(user);
+      if (user.email) {
+        throw new Error('A user already exists with this e-mail address');
+      }
+      return true; // Validation successful
+    }),
   body('password')
     .trim()
     .isLength({ min: 8 })
@@ -37,16 +47,12 @@ exports.sign_up_post = [
     .isNumeric()
     .withMessage('Password must contain at least one number')
     .escape(),
-  body('password2'),
-  // custom validators
-  body('email').custom(async (value, { req, res, next }) => {
-    const user = await User.find({ email: value });
-    if (user) res.render('sign_up', { errors: ['E-mail is already in use'] });
-  }),
-  body('password2').custom(async (value, { req, res, next }) => {
+  body('password2').custom(async (value, { req }) => {
     const firstPassword = req.body.password;
-    if (firstPassword !== value)
-      res.render('sign_up', { errors: ['Passwords are not the same'] });
+    if (firstPassword !== value) {
+      throw new Error('Passwords do not match');
+    }
+    return true; // Validation successful
   }),
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -58,7 +64,21 @@ exports.sign_up_post = [
         errors: errors.array(),
       });
       return;
+    } else {
+      try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const newUser = new User({
+          name: req.body.name,
+          secondName: req.body.secondName,
+          email: req.body.email,
+          password: hashedPassword,
+        });
+
+        await newUser.save();
+        res.redirect('/');
+      } catch (error) {
+        res.render(error);
+      }
     }
-    res.redirect(`/`, { title: 'Main Page' });
   }),
 ];
