@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>Signup</h1>
-    <form action="/signup" method="post">
+    <form action="/sign-up" method="post">
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required />
       <br />
@@ -18,7 +18,10 @@
       <input type="email" id="email" name="email" required />
       <br />
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required />
+      <input type="password" id="password" name="password" required placeholder="Min 8 characters, at least one lowercase, one uppercase, and one number"/>
+      <br />
+      <label for="password2">Password:</label>
+      <input type="password" id="password2" name="password2" required placeholder="Repeat password"/>
       <br />
       <button type="submit">Sign Up</button>
     </form>
