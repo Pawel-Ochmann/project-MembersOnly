@@ -2,10 +2,11 @@ const User = require('../models/user');
 const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
-// const passport = require('../passport-config');
+const passport = require('../passport-config');
 
 exports.main_page = asyncHandler(async (req, res, next) => {
-  res.render('index', { title: 'Main page' });
+  console.log(req.user)
+  res.render('index', { title: 'Main page', user:req.user});
 });
 
 exports.sign_up_get = asyncHandler(async (req, res, next) => {
@@ -40,12 +41,6 @@ exports.sign_up_post = [
     .trim()
     .isLength({ min: 8 })
     .withMessage('Must contain at least 8 characters')
-    .isLowercase()
-    .withMessage('Password must contain at least one lowercase')
-    .isUppercase()
-    .withMessage('Password must contain at least one uppercase')
-    .isNumeric()
-    .withMessage('Password must contain at least one number')
     .escape(),
   body('password2').custom(async (value, { req }) => {
     const firstPassword = req.body.password;
@@ -77,8 +72,28 @@ exports.sign_up_post = [
         await newUser.save();
         res.redirect('/');
       } catch (error) {
-        res.render(error);
+        res.send(error);
       }
     }
   }),
 ];
+
+exports.sign_in_get = asyncHandler(async (req, res, next) => {
+  res.render('sign_in', { errors: null });
+});
+
+exports.sign_in_post = function (req, res, next) {
+  console.log('logging..')
+  passport.authenticate('local', (err, user, info) => {
+    console.log(err, user, info);
+    if (err)  return res.render('sign_in', { errors: [err.message] });
+    else if (!user) {
+      // Authentication failed, render sign-in page with error message
+      return res.render('sign_in', {
+        errors: [info.message],
+      });
+    } else {
+      res.redirect('/');
+    }
+  })(req,res,next);
+};
