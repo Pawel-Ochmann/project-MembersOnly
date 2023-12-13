@@ -1,11 +1,14 @@
 const User = require('../models/user');
+const Message = require('../models/message');
 const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const passport = require('../passport-config');
 
 exports.main_page = asyncHandler(async (req, res, next) => {
-  res.render('index', { title: 'Main page', user: req.user });
+  const messages = await Message.find().populate('author');
+
+  res.render('index', { title: 'Main page', user: req.user, messages });
 });
 
 exports.sign_up_get = asyncHandler(async (req, res, next) => {
@@ -119,4 +122,69 @@ exports.sign_off_get = asyncHandler(async (req, res, next) => {
     await User.findByIdAndDelete(userId);
     res.redirect('/');
   });
+});
+
+exports.messages_create_get = asyncHandler(async (req, res, next) => {
+  res.render('messages_create');
+});
+
+exports.messages_create_post = [
+  body('title').trim().isLength({ min: 1 }).escape(),
+  body('content').trim().isLength({ min: 1 }).escape(),
+  asyncHandler(async (req, res, next) => {
+    console.log('working');
+    const authorId = req.user._id;
+    const newMessage = await new Message({
+      title: req.body.title,
+      content: req.body.content,
+      author: authorId,
+    });
+
+    await newMessage.save();
+    res.redirect('/');
+  }),
+];
+
+exports.join_get = asyncHandler(async (req, res, next) => {
+  res.render('join', { error: null });
+});
+
+exports.join_post = asyncHandler(async (req, res, next) => {
+  if (req.body.password !== 'password') {
+    res.render('join', { error: 'Incorrect password!' });
+  } else {
+    const user = await User.findById(req.user._id);
+
+    const userUpdated = new User({ ...user, _id:req.user._id ,isMembership: true });
+  
+    await User.findByIdAndUpdate(user._id, userUpdated);
+    res.redirect('/');
+  }
+});
+
+exports.admin_get = asyncHandler(async (req, res, next) => {
+    res.render('admin', { error: null });
+});
+
+exports.admin_post = asyncHandler(async (req, res, next) => {
+     if (req.body.password !== 'admin') {
+       res.render('admin', { error: 'Incorrect password!' });
+     } else {
+       const user = await User.findById(req.user._id);
+
+       const userUpdated = new User({
+         ...user,
+         isMembership:true,
+         _id: req.user._id,
+         isAdmin: true,
+       });
+
+       await User.findByIdAndUpdate(user._id, userUpdated);
+       res.redirect('/');
+     }
+});
+
+exports.delete_get = asyncHandler(async (req, res, next) => {
+      await Message.findByIdAndDelete(req.params.id);
+      res.redirect('/')
 });

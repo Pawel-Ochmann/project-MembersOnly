@@ -5,14 +5,49 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <% if (user) {%>
-    <h1>WELCOME <%= user.fullName %></h1>
-    <a href="/log-out">Log out</a>
-    <a href="/sign-off">Sign off</a>
-    <% } else { %>
-    <p>Welcome to <%= title %></p>
-    <a href="/sign-up">Sign up</a>
-    <a href="/sign-in">Sign in</a>
-    <%}%>
+    
+ <% if (user) { %>
+  <h1>WELCOME <%= user.fullName %></h1>
+  <a href="/log-out">Log out</a>
+  <a href="/sign-off">Sign off</a>
+  <% } %>
+
+  <% if (user && user.isMembership) { %>
+    <a href="/messages/create">Create new message</a>
+  <% }  %>
+
+   <% if (user && !user.isMembership) { %>
+    <a href="/join">Join the club</a>
+  <% } %>
+
+   <% if (user && !user.isAdmin) { %>
+    <a href="/admin">Become an admin</a>
+  <% } %>
+  
+  
+ <% if (!user) { %>
+  <p>Welcome to <%= title %></p>
+  <a href="/sign-up">Sign up</a>
+  <a href="/sign-in">Sign in</a>
+<% } %>
+
+
+    <h1>Messages</h1>
+
+    <% if (messages.length > 0) { %> <% messages.forEach(message => { %>
+    <div>
+      <h2><%= message.title %></h2>
+
+      <% if (user && user.isMembership) {%>
+      <p><strong>Author:</strong> <%= message.author.fullName %></p>
+      <p><strong>Date:</strong> <%= message.date_formatted %></p>
+      <%}%>
+      <% if (user && user.isAdmin) { %> <a href="<%- `/${message._id}/delete` %>">Delete message</a> <% } %> 
+      <p><%= message.content %></p>
+    </div>
+    <hr />
+    <% }); %> <% } else { %>
+    <p>No messages yet</p>
+    <% } %>
   </body>
 </html>

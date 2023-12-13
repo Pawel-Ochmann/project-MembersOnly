@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 const { DateTime } = require('luxon');
 
 const MessageSchema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
   content: {
     type: String,
     required: true,
@@ -22,4 +26,4 @@ MessageSchema.virtual('date_formatted').get(function () {
   return DateTime.fromJSDate(this.date).toISODate();
 });
 
-module.exports = mongoose.model('Message', UserSchema);
+module.exports = mongoose.model('Message', MessageSchema);

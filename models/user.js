@@ -18,6 +18,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  isMembership:{
+    type:Boolean,
+    default:false
+  },
   isAdmin: {
     type: Boolean,
     default: false,
@@ -25,7 +29,7 @@ const UserSchema = new Schema({
 });
 
 UserSchema.virtual('fullName').get(function () {
-  return this.name + this.secondName;
+  return `${this.name} ${this.secondName}`;
 });
 
 module.exports = mongoose.model('User', UserSchema);

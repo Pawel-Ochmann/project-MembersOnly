@@ -39,7 +39,16 @@ app.use(helmet());
 app.use(limiter);
 
 
-app.use(session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: true }));
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: true,
+    rolling:true,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }, // Session lasts for 24 hours
+  })
+);
+
 app.use(passport.initialize());
 app.use(passport.session());
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Become an admin!</h1>
+    <form action="/admin" method="post">
+      <label for="password">What is the secret password?</label>
+      <input type="password" name="password"/>
+      <% if (error) {%>
+      <p><%- error %></p>
+      <% } %>
+      <button>Join</button>
+    </form>
+  </body>
+</html>
