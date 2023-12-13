@@ -5,8 +5,7 @@ const bcrypt = require('bcryptjs');
 const passport = require('../passport-config');
 
 exports.main_page = asyncHandler(async (req, res, next) => {
-  console.log(req.user)
-  res.render('index', { title: 'Main page', user:req.user});
+  res.render('index', { title: 'Main page', user: req.user });
 });
 
 exports.sign_up_get = asyncHandler(async (req, res, next) => {
@@ -83,17 +82,41 @@ exports.sign_in_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.sign_in_post = function (req, res, next) {
-  console.log('logging..')
   passport.authenticate('local', (err, user, info) => {
-    console.log(err, user, info);
-    if (err)  return res.render('sign_in', { errors: [err.message] });
+    if (err) return res.render('sign_in', { errors: [err.message] });
     else if (!user) {
       // Authentication failed, render sign-in page with error message
       return res.render('sign_in', {
         errors: [info.message],
       });
     } else {
-      res.redirect('/');
+      req.login(user, (loginErr) => {
+        if (loginErr) {
+          return next(loginErr);
+        }
+        // Redirect to the home page or another destination
+        res.redirect('/');
+      });
     }
-  })(req,res,next);
+  })(req, res, next);
 };
+
+exports.log_out_get = asyncHandler(async (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
+});
+
+exports.sign_off_get = asyncHandler(async (req, res, next) => {
+  const userId = req.user._id;
+  req.logout(async (err) => {
+    if (err) {
+      return next(err);
+    }
+    await User.findByIdAndDelete(userId);
+    res.redirect('/');
+  });
+});
