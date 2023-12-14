@@ -1,8 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:wght@400;700&display=swap');
+
+:root {
+  --color-font-main: rgb(226, 232, 240);
+  --color-font-secondary: rgb(76, 87, 108);
+  --color-div-background: rgb(30, 41, 59);
+  --color-main-theme: rgb(14, 165, 233);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Afacad', sans-serif;
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: rgb(11, 17, 33);
+  color: var(--color-font-main);
 }
 
 a {
-  color: #00B7FF;
+  color: var(--color-font-main);
+  text-decoration: none;
+  font-size: 1.5rem;
+  transition: 0.3s;
+  font-weight: 800;
+  &:hover {
+    color: var(--color-main-theme);
+  }
+}
+
+header {
+  display: flex;
+  max-width: 800px;
+  margin: 2rem auto;
+  justify-content: space-between;
+  align-items: end;
+  border-bottom: 2px solid var(--color-main-theme);
+  & h1 {
+    color: var(--color-main-theme);
+    line-height: 0.8;
+  }
+  & .nav {
+    display: flex;
+    gap: 1rem;
+  }
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: 0 auto;
+  gap: 1rem;
+  & .message {
+    background-color: var(--color-div-background);
+    padding: 1rem;
+    border-radius: .5rem;
+    text-align: center; 
+    transition: .3s;
+    &:hover {
+      filter: brightness(1.2);
+    }
+  }
 }
