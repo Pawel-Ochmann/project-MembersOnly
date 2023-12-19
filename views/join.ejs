@@ -7,6 +7,27 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
+        <header>
+      <a href="/">
+        <h1>The Club</h1>
+      </a>
+      <div class="nav">
+        <% if (user) { %>
+        <h1>WELCOME <%= user.fullName %></h1>
+        <a href="/log-out">Log out</a>
+        <a href="/sign-off">Sign off</a>
+        <% } %> <% if (user && user.isMembership) { %>
+        <a href="/messages/create">Create new message</a>
+        <% } %> <% if (user && !user.isMembership) { %>
+        <a href="/join">Join the club</a>
+        <% } %> <% if (user && !user.isAdmin) { %>
+        <a href="/admin">Become an admin</a>
+        <% } %> <% if (!user) { %>
+        <a href="/sign-up">Sign up</a>
+        <a href="/sign-in">Sign in</a>
+        <% } %>
+      </div>
+    </header>
     <h1>Join the Club!</h1>
     <form action="/join" method="post">
       <label for="password">What is the secret password?</label>

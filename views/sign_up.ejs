@@ -7,35 +7,66 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <h1>Signup</h1>
+    <header>
+      <a href="/">
+        <h1>The Club</h1>
+      </a>
+      <div class="nav">
+        <% if (user) { %>
+        <h1>WELCOME <%= user.fullName %></h1>
+        <a href="/log-out">Log out</a>
+        <a href="/sign-off">Sign off</a>
+        <% } %> <% if (user && user.isMembership) { %>
+        <a href="/messages/create">Create new message</a>
+        <% } %> <% if (user && !user.isMembership) { %>
+        <a href="/join">Join the club</a>
+        <% } %> <% if (user && !user.isAdmin) { %>
+        <a href="/admin">Become an admin</a>
+        <% } %> <% if (!user) { %>
+        <a href="/sign-up">Sign up</a>
+        <a href="/sign-in">Sign in</a>
+        <% } %>
+      </div>
+    </header>
+ 
     <form action="/sign-up" method="post">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
-      <br />
-      <label for="secondName">Second Name:</label>
-      <input type="text" id="secondName" name="secondName" required />
-      <br />
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
-      <br />
-      <label for="password">Password:</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        required
-        placeholder="Must contain minimum 8 characters"
-      />
-      <br />
-      <label for="password2">Password:</label>
-      <input
-        type="password"
-        id="password2"
-        name="password2"
-        required
-        placeholder="Repeat password"
-      />
-      <br />
+      <div class="inputBox">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+   
+      <div class="inputBox">
+        <label for="secondName">Second Name:</label>
+        <input type="text" id="secondName" name="secondName" required />
+      </div>
+     
+      <div class="inputBox">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+   
+      <div class="inputBox">
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          placeholder="Must contain minimum 8 characters"
+        />
+      </div>
+   
+      <div class="inputBox">
+        <label for="password2">Password:</label>
+        <input
+          type="password"
+          id="password2"
+          name="password2"
+          required
+          placeholder="Repeat password"
+        />
+      </div>
+   
       <button type="submit">Sign Up</button>
     </form>
     <% if (errors) { errors.forEach(error => { %>

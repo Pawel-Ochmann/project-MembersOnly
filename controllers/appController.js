@@ -12,7 +12,7 @@ exports.main_page = asyncHandler(async (req, res, next) => {
 });
 
 exports.sign_up_get = asyncHandler(async (req, res, next) => {
-  res.render('sign_up', { errors: null });
+  res.render('sign_up', { errors: null, user: req.user });
 });
 
 exports.sign_up_post = [
@@ -59,6 +59,7 @@ exports.sign_up_post = [
       // You may want to customize this based on your needs
       res.render('sign_up', {
         errors: errors.array(),
+        user: req.user,
       });
       return;
     } else {
@@ -81,16 +82,17 @@ exports.sign_up_post = [
 ];
 
 exports.sign_in_get = asyncHandler(async (req, res, next) => {
-  res.render('sign_in', { errors: null });
+  res.render('sign_in', { errors: null, user: req.user });
 });
 
 exports.sign_in_post = function (req, res, next) {
   passport.authenticate('local', (err, user, info) => {
-    if (err) return res.render('sign_in', { errors: [err.message] });
+    if (err) return res.render('sign_in', { errors: [err.message], user: req.user });
     else if (!user) {
       // Authentication failed, render sign-in page with error message
       return res.render('sign_in', {
         errors: [info.message],
+        user: req.user,
       });
     } else {
       req.login(user, (loginErr) => {
@@ -125,7 +127,7 @@ exports.sign_off_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.messages_create_get = asyncHandler(async (req, res, next) => {
-  res.render('messages_create');
+  res.render('messages_create', { user: req.user });
 });
 
 exports.messages_create_post = [
@@ -146,12 +148,12 @@ exports.messages_create_post = [
 ];
 
 exports.join_get = asyncHandler(async (req, res, next) => {
-  res.render('join', { error: null });
+  res.render('join', { error: null, user: req.user });
 });
 
 exports.join_post = asyncHandler(async (req, res, next) => {
   if (req.body.password !== 'password') {
-    res.render('join', { error: 'Incorrect password!' });
+    res.render('join', { error: 'Incorrect password!', user: req.user });
   } else {
     const user = await User.findById(req.user._id);
 
@@ -163,12 +165,12 @@ exports.join_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.admin_get = asyncHandler(async (req, res, next) => {
-    res.render('admin', { error: null });
+    res.render('admin', { error: null, user: req.user });
 });
 
 exports.admin_post = asyncHandler(async (req, res, next) => {
      if (req.body.password !== 'admin') {
-       res.render('admin', { error: 'Incorrect password!' });
+       res.render('admin', { error: 'Incorrect password!', user: req.user });
      } else {
        const user = await User.findById(req.user._id);
 

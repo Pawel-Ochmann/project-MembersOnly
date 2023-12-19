@@ -30,15 +30,16 @@
     <div class="messages">
       <% if (messages.length > 0) { %> <% messages.forEach(message => { %>
       <div class="message">
-        <div>
-          <h2><%= message.title %></h2>
-          <% if (user && user.isMembership) {%>
+        <h2><%= message.title %></h2>
+
+        <p><%= message.content %></p>
+        <% if (user && user.isMembership) {%>
+        <div class="info">
           <p><strong>Author:</strong> <%= message.author.fullName %></p>
           <p><strong>Date:</strong> <%= message.date_formatted %></p>
-          <%}%> <% if (user && user.isAdmin) { %>
-          <a href="<%- `/${message._id}/delete` %>">Delete message</a> <% } %>
-          <p><%= message.content %></p>
         </div>
+        <%}%> <% if (user && user.isAdmin) { %>
+        <a class="delete" href="<%- `/${message._id}/delete` %>">Delete message</a> <% } %>
       </div>
       <% }); %> <% } else { %>
       <div class="message">
