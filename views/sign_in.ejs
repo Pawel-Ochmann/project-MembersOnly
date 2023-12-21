@@ -4,16 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign In</title>
-   <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-        <header>
+    <header>
       <a href="/">
         <h1>The Club</h1>
       </a>
       <div class="nav">
         <% if (user) { %>
-        <h1>WELCOME <%= user.fullName %></h1>
         <a href="/log-out">Log out</a>
         <a href="/sign-off">Sign off</a>
         <% } %> <% if (user && user.isMembership) { %>
@@ -28,16 +27,19 @@
         <% } %>
       </div>
     </header>
-    <h1>Sign In</h1>
-
+       <% if (user) { %>
+    <p class="userInfo">Logged as <span> <%- user.fullName %> </span></p>
+    <% } %>
     <form action="/sign-in" method="post">
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
-      <br />
+      <div class="inputBox">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+      </div>
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required />
-      <br />
+      <div class="inputBox">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+      </div>
 
       <button type="submit">Sign In</button>
     </form>

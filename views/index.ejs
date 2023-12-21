@@ -11,7 +11,6 @@
       </a>
       <div class="nav">
         <% if (user) { %>
-        <h1>WELCOME <%= user.fullName %></h1>
         <a href="/log-out">Log out</a>
         <a href="/sign-off">Sign off</a>
         <% } %> <% if (user && user.isMembership) { %>
@@ -26,6 +25,9 @@
         <% } %>
       </div>
     </header>
+       <% if (user) { %>
+    <p class="userInfo">Logged as <span> <%- user.fullName %> </span></p>
+    <% } %>
 
     <div class="messages">
       <% if (messages.length > 0) { %> <% messages.forEach(message => { %>

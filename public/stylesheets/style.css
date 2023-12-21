@@ -53,52 +53,59 @@ header {
 .messages {
   display: flex;
   flex-direction: column;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
   gap: 1rem;
   & .message {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
     background-color: var(--color-div-background);
     padding: 1rem;
     border-radius: 1rem;
-    text-align: center; 
+    text-align: center;
     & .info {
       display: flex;
       justify-content: space-around;
     }
-    &>p {
+    & > p {
       font-size: 1.3rem;
       color: var(--color-font-secondary);
     }
   }
 }
 
-.delete, button {
+.delete,
+button {
   background-color: var(--color-main-theme);
   width: max-content;
-  margin: .5rem auto;
-  padding: .2rem 1rem;
+  margin: 0.5rem auto;
+  padding: 0.2rem 1rem;
   border: none;
-  border-radius: .7rem;
+  border-radius: 0.7rem;
   color: var(--color-font-main);
   text-decoration: none;
-  transition: .3s;
+  transition: 0.3s;
   font-size: 1.3rem;
   font-weight: 800;
-  transition: .3s;
+  transition: 0.3s;
   &:hover {
     filter: brightness(1.2);
   }
 }
 
 form {
-  margin: 0 auto;
+  margin: 3rem auto;
   display: flex;
   flex-direction: column;
   max-width: 500px;
   gap: 1rem;
+
+  & input:-webkit-autofill,
+  & input:-webkit-autofill:focus {
+    transition: background-color 0s 600000s, color 0s 600000s;
+  }
+
   & .inputBox {
     display: flex;
     justify-content: space-between;
@@ -106,14 +113,15 @@ form {
       font-size: 1.5rem;
       color: var(--color-font-secondary);
     }
-    & input {
+    & input,
+    & textarea {
       background-color: var(--color-div-background);
       border: none;
       min-width: 300px;
-      transition: .3s;
+      transition: 0.3s;
       color: var(--color-font-main);
-      padding: .5rem .6rem;
-      border-radius: .5rem;
+      padding: 0.5rem 0.6rem;
+      border-radius: 0.5rem;
       &:hover {
         background-color: rgb(54, 65, 90);
       }
@@ -124,6 +132,20 @@ form {
     }
   }
   & button {
-    font
+    font-size: 1rem;
+    padding: 0.3rem 1.2rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+  }
+}
+
+.userInfo {
+  width: max-content;
+  margin: 0 auto;
+  font-size: 1.3rem;
+  & span {
+    color: var(--color-main-theme);
+    text-transform: uppercase;
+    font-size: 1.5rem;
   }
 }
